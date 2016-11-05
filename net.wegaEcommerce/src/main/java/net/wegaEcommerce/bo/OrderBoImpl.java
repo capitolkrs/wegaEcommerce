@@ -7,12 +7,12 @@ import net.wegaEcommerce.dto.Order;
 
 public class OrderBoImpl implements OrderBo {
 
-	OrderDao orderDao;
+	private OrderDao orderDao;
 	
 	public boolean placeOrder(Order order) throws BOException {
 		
 			try {
-				int orderResult = orderDao.createOrder(order);
+				int orderResult = getOrderDao().createOrder(order);
 				if(orderResult==0){
 					return false;
 				}
@@ -28,9 +28,9 @@ public class OrderBoImpl implements OrderBo {
 	public boolean cancelOrder(int id) throws BOException {
 		
 		try {
-			Order order = orderDao.readOrder(id);
+			Order order = getOrderDao().readOrder(id);
 			order.setStatus("cancelled");
-			int result = orderDao.updateOrder(order);
+			int result = getOrderDao().updateOrder(order);
 			
 			if(result==0){
 				return false;
@@ -44,7 +44,7 @@ public class OrderBoImpl implements OrderBo {
 	public boolean deleteOrder(int id) throws BOException {
 		
 		try {
-			int result=orderDao.deleteOrder(id);
+			int result=getOrderDao().deleteOrder(id);
 			if(result==0){
 				return false;
 			}
@@ -53,6 +53,14 @@ public class OrderBoImpl implements OrderBo {
 			throw new BOException(e);
 		}
 		return true;
+	}
+
+	public OrderDao getOrderDao() {
+		return orderDao;
+	}
+
+	public void setOrderDao(OrderDao orderDao) {
+		this.orderDao = orderDao;
 	}
 
 }
